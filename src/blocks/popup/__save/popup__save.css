@@ -1,5 +1,5 @@
 .popup__save {
-    margin-top: 13px;
+    margin-top: 23px;
     border: none;
     background-color: black;
     color: #fff;
@@ -19,6 +19,12 @@
         min-height: 46px;
         font-size: 14px;
         line-height: 17px;
+        margin-top: 5px;
+    } 
+}
 
+@media screen and (max-width: 550px) {
+    .popup__save {
+        margin-top: 20px;
     } 
 }

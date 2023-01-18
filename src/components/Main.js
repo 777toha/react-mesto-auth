@@ -35,12 +35,12 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onC
             </section>
 
             <section className="elements">
-                {cards.map((card) => 
-                <Card 
-                key={card._id} 
-                cards={card}
-                onCardClick={onCardClick}
-                />)}
+                {cards.map((card) =>
+                    <Card
+                        key={card._id}
+                        cards={card}
+                        onCardClick={onCardClick}
+                    />)}
             </section>
         </main>
     )

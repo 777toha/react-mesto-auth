@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from "./Header";
 import Main from "./Main";
 import Footer from './Footer';
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import PopupWithEditAvatar from "./PopupWithEditAvatar";
-import PopupWithEditProfile from './PopupWithEditProfile'; 
+import PopupWithEditProfile from './PopupWithEditProfile';
 import PopupWithAddPlace from './PopupWithAddPlace';
-import { api } from '../utils/Api'
+import { api } from '../utils/api'
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
@@ -48,13 +48,10 @@ function App() {
                 userDescription: res.about,
                 userAvatar: res.avatar
             })))
-    }, []);
-
-    useEffect(() => {
-        api.getCards().then((data) => {setCards(data)})
-    }, []);
-
-
+            .catch(err => console.log(`Ошибка.....: ${err}`));
+        api.getCards().then((data) => { setCards(data) })
+            .catch(err => console.log(`Ошибка.....: ${err}`))
+    }, [])
 
     return (
         <div className="page">
@@ -72,19 +69,19 @@ function App() {
 
             <Footer />
 
-            <PopupWithEditProfile 
-            isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}
+            <PopupWithEditProfile
+                isOpen={isEditProfilePopupOpen}
+                onClose={closeAllPopups}
             />
 
-            <PopupWithAddPlace 
-            isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}
+            <PopupWithAddPlace
+                isOpen={isAddPlacePopupOpen}
+                onClose={closeAllPopups}
             />
 
-            <ImagePopup 
-            card={selectedCard}
-            onClose={closeAllPopups}
+            <ImagePopup
+                card={selectedCard}
+                onClose={closeAllPopups}
             />
 
             <PopupWithForm
@@ -93,9 +90,9 @@ function App() {
                 buttonText='Да'
             />
 
-            <PopupWithEditAvatar 
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
+            <PopupWithEditAvatar
+                isOpen={isEditAvatarPopupOpen}
+                onClose={closeAllPopups}
             />
 
         </div>

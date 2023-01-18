@@ -20,7 +20,7 @@ function Card(props) {
                     <h2 className="element__title">{props.cards.name}</h2>
                     <div className="element__like">
                         <button className="element__like-button" type="button"></button>
-                        <p className="element__counter-like">0</p>
+                        <p className="element__counter-like">{props.cards.likes.length}</p>
                     </div>
                 </div>
             </div>

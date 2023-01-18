@@ -1,5 +1,5 @@
 import React from "react";
-import Cards from "./Cards";
+import Card from "./Card";
 
 function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onCardClick }) {
 
@@ -36,7 +36,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onC
 
             <section className="elements">
                 {cards.map((card) => 
-                <Cards 
+                <Card 
                 key={card._id} 
                 cards={card}
                 onCardClick={onCardClick}

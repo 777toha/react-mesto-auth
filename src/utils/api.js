@@ -56,7 +56,7 @@ class Api {
             method: `${isLiked ? 'PUT' : 'DELETE'}`,
             headers: this._headers
         })
-            .then(this._checkResponse)
+            .then(this._checkError)
     }
 
     getLikes(id) {

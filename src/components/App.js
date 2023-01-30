@@ -61,13 +61,6 @@ function App() {
         }).catch(err => console.log(`Ошибка.....: ${err}`));
     }, []);
 
-    // useEffect(() => {
-    //     api.getUserInfo().then((data) => {setCurrentUser(data)})
-    //         .catch(err => console.log(`Ошибка.....: ${err}`));
-    //     api.getCards().then((data) => { setCards(data) })
-    //         .catch(err => console.log(`Ошибка.....: ${err}`))
-    // }, [])
-
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">

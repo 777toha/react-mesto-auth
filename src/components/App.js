@@ -7,15 +7,16 @@ import ImagePopup from "./ImagePopup";
 import PopupWithEditAvatar from "./PopupWithEditAvatar";
 import PopupWithEditProfile from './PopupWithEditProfile';
 import PopupWithAddPlace from './PopupWithAddPlace';
-import api from '../utils/api'
+import api from '../utils/api';
+import CurrentUserContext from '../context/CurrentUserContext';
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
-    const [userContext, setUserContext] = useState({ userName: '', userDescription: '', userAvatar: '' });
     const [cards, setCards] = useState([]);
-    const [selectedCard, setSelectedCard] = React.useState(null)
+    const [selectedCard, setSelectedCard] = React.useState(null);
+    const [currentUser, setCurrentUser] = React.useState({});
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true);
@@ -40,62 +41,78 @@ function App() {
         setSelectedCard(card)
     }
 
-    useEffect(() => {
-        api.getInfo().then(res => setUserContext(
-            userContext => ({
-                userContext,
-                userName: res.name,
-                userDescription: res.about,
-                userAvatar: res.avatar
-            })))
+    function handleCardLike(card) {
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+        api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
+            })
             .catch(err => console.log(`Ошибка.....: ${err}`));
-        api.getCards().then((data) => { setCards(data) })
-            .catch(err => console.log(`Ошибка.....: ${err}`))
-    }, [])
+    }
+
+    useEffect(() => {
+        Promise.all([
+            api.getUserInfo(),
+            api.getCards()
+        ]).then(([userData, cardData]) => {
+            setCurrentUser(userData);
+            setCards(cardData);
+        }).catch(err => console.log(`Ошибка.....: ${err}`));
+    }, []);
+
+    // useEffect(() => {
+    //     api.getUserInfo().then((data) => {setCurrentUser(data)})
+    //         .catch(err => console.log(`Ошибка.....: ${err}`));
+    //     api.getCards().then((data) => { setCards(data) })
+    //         .catch(err => console.log(`Ошибка.....: ${err}`))
+    // }, [])
 
     return (
-        <div className="page">
+        <CurrentUserContext.Provider value={currentUser}>
+            <div className="page">
 
-            <Header />
+                <Header />
 
-            <Main
-                onEditAvatar={handleEditAvatarClick}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                userContext={userContext}
-                onCardClick={handleCardClick}
-                cards={cards}
-            />
+                <Main
+                    onEditAvatar={handleEditAvatarClick}
+                    onEditProfile={handleEditProfileClick}
+                    onAddPlace={handleAddPlaceClick}
+                    onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
+                    cards={cards}
+                />
 
-            <Footer />
+                <Footer />
 
-            <PopupWithEditProfile
-                isOpen={isEditProfilePopupOpen}
-                onClose={closeAllPopups}
-            />
+                <PopupWithEditProfile
+                    isOpen={isEditProfilePopupOpen}
+                    onClose={closeAllPopups}
+                />
 
-            <PopupWithAddPlace
-                isOpen={isAddPlacePopupOpen}
-                onClose={closeAllPopups}
-            />
+                <PopupWithAddPlace
+                    isOpen={isAddPlacePopupOpen}
+                    onClose={closeAllPopups}
+                />
 
-            <ImagePopup
-                card={selectedCard}
-                onClose={closeAllPopups}
-            />
+                <ImagePopup
+                    card={selectedCard}
+                    onClose={closeAllPopups}
+                />
 
-            <PopupWithForm
-                name='confirm-delete'
-                title='Вы уверены?'
-                buttonText='Да'
-            />
+                <PopupWithForm
+                    name='confirm-delete'
+                    title='Вы уверены?'
+                    buttonText='Да'
+                />
 
-            <PopupWithEditAvatar
-                isOpen={isEditAvatarPopupOpen}
-                onClose={closeAllPopups}
-            />
+                <PopupWithEditAvatar
+                    isOpen={isEditAvatarPopupOpen}
+                    onClose={closeAllPopups}
+                />
 
-        </div>
+            </div>
+        </CurrentUserContext.Provider>
     );
 }
 

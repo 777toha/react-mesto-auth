@@ -1,8 +1,10 @@
 import React from "react";
 import Card from "./Card";
+import CurrentUserContext from "../context/CurrentUserContext";
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onCardClick }) {
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, cards }) {
 
+    const currentUser = React.useContext(CurrentUserContext);
 
     return (
         <main>
@@ -11,12 +13,12 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onC
                 <div
                     className="profile__avatar"
                     onClick={onEditAvatar}
-                    style={{ backgroundImage: `url(${userContext.userAvatar})` }}
+                    style={{ backgroundImage: `url(${currentUser.avatar})` }}
                 >
                 </div>
                 <div className="profile__info">
                     <div className="profile__container">
-                        <h1 className="profile__title">{userContext.userName}</h1>
+                        <h1 className="profile__title">{currentUser.name}</h1>
                         <button
                             type="button"
                             className="profile__edit-button"
@@ -24,7 +26,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onC
                         >
                         </button>
                     </div>
-                    <h2 className="profile__subtitle">{userContext.userDescription}</h2>
+                    <h2 className="profile__subtitle">{currentUser.about}</h2>
                 </div>
                 <button
                     className="profile__add-button"
@@ -40,6 +42,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, userContext, cards, onC
                         key={card._id}
                         cards={card}
                         onCardClick={onCardClick}
+                        onCardLike={onCardLike}
                     />)}
             </section>
         </main>

@@ -5,18 +5,18 @@ class Api {
     }
 
     _checkError(res) {
-        if(res.ok) {
+        if (res.ok) {
             return res.json();
         }
         return Promise.reject(res.status);
     }
 
-    getInfo() {
+    getUserInfo() {
         return fetch(`${this._url}/users/me`, {
             method: 'GET',
             headers: this._headers
         })
-        .then(this._checkError)
+            .then(this._checkError)
     }
 
     getCards() {
@@ -24,7 +24,7 @@ class Api {
             method: 'GET',
             headers: this._headers
         })
-        .then(this._checkError)
+            .then(this._checkError)
     }
 
     sendUserInfo(userData) {
@@ -36,7 +36,7 @@ class Api {
                 about: userData.job
             })
         })
-    .then(this._checkError);
+            .then(this._checkError);
     }
 
     postCards(data) {
@@ -48,7 +48,15 @@ class Api {
                 link: data.url
             })
         })
-        .then(this._checkError);
+            .then(this._checkError);
+    }
+
+    changeLikeCardStatus(id, isLiked) {
+        return fetch(`${this._url}/cards/likes/${id}`, {
+            method: `${isLiked ? 'PUT' : 'DELETE'}`,
+            headers: this._headers
+        })
+            .then(this._checkResponse)
     }
 
     getLikes(id) {
@@ -56,15 +64,15 @@ class Api {
             method: 'PUT',
             headers: this._headers
         })
-        .then(this._checkError)
+            .then(this._checkError)
     }
-    
+
     deleteLikes(id) {
         return fetch(`${this._url}/cards/likes/${id}`, {
             method: 'DELETE',
             headers: this._headers
         })
-        .then(this._checkError); 
+            .then(this._checkError);
     }
 
     deleteCard(id) {
@@ -72,7 +80,7 @@ class Api {
             method: 'DELETE',
             headers: this._headers
         })
-        .then(this._checkError); 
+            .then(this._checkError);
     }
 
     getUserAvatar(data) {
@@ -83,26 +91,26 @@ class Api {
                 avatar: data.avatar,
             })
         })
-        .then(this._checkError);
+            .then(this._checkError);
     }
-    
+
     getPromiseAll() {
-       return Promise.all([
+        return Promise.all([
 
-        this.getInfo(),
+            this.getInfo(),
 
-        this.getCards()
+            this.getCards()
 
-    ]);
+        ]);
     }
 }
 
 const api = new Api({
     url: 'https://mesto.nomoreparties.co/v1/cohort-56',
     headers: {
-      authorization: 'b539dedd-af29-48d2-8a46-3706330bf2bf',
-      'Content-Type': 'application/json'
+        authorization: 'b539dedd-af29-48d2-8a46-3706330bf2bf',
+        'Content-Type': 'application/json'
     }
-  })
+})
 
 export default api 

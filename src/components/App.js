@@ -62,27 +62,27 @@ function App() {
         api.sendUserInfo(userData)
             .then((data) => {
                 setCurrentUser(data);
+                closeAllPopups();
             })
-            .catch(err => console.log(`Ошибка.....: ${err}`));
-        closeAllPopups();
+            .catch(err => console.log(`Ошибка.....: ${err}`))
     }
 
     function handleUpdateAvatar(userData) {
         api.getUserAvatar(userData)
             .then((data) => {
                 setCurrentUser(data);
+                closeAllPopups();
             })
-            .catch(err => console.log(`Ошибка.....: ${err}`));
-        closeAllPopups();
+            .catch(err => console.log(`Ошибка.....: ${err}`))
     }
 
     function handleAddPlaceSubmit(data) {
         api.postCards(data)
             .then((newCard) => {
                 setCards([newCard, ...cards]);
+                closeAllPopups();
             })
-            .catch(err => console.log(`Ошибка.....: ${err}`));
-        closeAllPopups();
+            .catch(err => console.log(`Ошибка.....: ${err}`))
     }
 
     useEffect(() => {

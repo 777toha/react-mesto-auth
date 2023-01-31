@@ -51,6 +51,40 @@ function App() {
             .catch(err => console.log(`Ошибка.....: ${err}`));
     }
 
+    function handleCardDelete(card) {
+        api.deleteCard(card._id).then(() => {
+            setCards(cards.filter(item => item !== card))
+        })
+            .catch(err => console.log(`Ошибка.....: ${err}`));
+    }
+
+    function handleUpdateUser(userData) {
+        api.sendUserInfo(userData)
+            .then((data) => {
+                setCurrentUser(data);
+            })
+            .catch(err => console.log(`Ошибка.....: ${err}`));
+        closeAllPopups();
+    }
+
+    function handleUpdateAvatar(userData) {
+        api.getUserAvatar(userData)
+            .then((data) => {
+                setCurrentUser(data);
+            })
+            .catch(err => console.log(`Ошибка.....: ${err}`));
+        closeAllPopups();
+    }
+
+    function handleAddPlaceSubmit(data) {
+        api.postCards(data)
+            .then((newCard) => {
+                setCards([newCard, ...cards]);
+            })
+            .catch(err => console.log(`Ошибка.....: ${err}`));
+        closeAllPopups();
+    }
+
     useEffect(() => {
         Promise.all([
             api.getUserInfo(),
@@ -73,6 +107,7 @@ function App() {
                     onAddPlace={handleAddPlaceClick}
                     onCardClick={handleCardClick}
                     onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
                     cards={cards}
                 />
 
@@ -81,11 +116,13 @@ function App() {
                 <PopupWithEditProfile
                     isOpen={isEditProfilePopupOpen}
                     onClose={closeAllPopups}
+                    onUpdateUser={handleUpdateUser}
                 />
 
                 <PopupWithAddPlace
                     isOpen={isAddPlacePopupOpen}
                     onClose={closeAllPopups}
+                    onUpdatePlace={handleAddPlaceSubmit}
                 />
 
                 <ImagePopup
@@ -102,6 +139,7 @@ function App() {
                 <PopupWithEditAvatar
                     isOpen={isEditAvatarPopupOpen}
                     onClose={closeAllPopups}
+                    onUpdateAvatar={handleUpdateAvatar}
                 />
 
             </div>

@@ -20,10 +20,14 @@ function Card(props) {
         props.onCardLike(props.cards)
     }
 
+    function handleCardDelete() {
+        props.onCardDelete(props.cards)
+    }
+
     return (
         <div id="element-template">
             <div className="element">
-                {isOwn && <button className="element__trash" type="button" />}
+                {isOwn && <button className="element__trash" type="button" onClick={handleCardDelete} />}
                 <img 
                 className="element__image" 
                 src={props.cards.link}

@@ -2,7 +2,13 @@ import React from "react";
 import Card from "./Card";
 import CurrentUserContext from "../context/CurrentUserContext";
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, cards }) {
+function Main({ onEditAvatar,
+    onEditProfile,
+    onAddPlace,
+    onCardClick,
+    onCardLike,
+    onCardDelete,
+    cards }) {
 
     const currentUser = React.useContext(CurrentUserContext);
 
@@ -43,6 +49,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike
                         cards={card}
                         onCardClick={onCardClick}
                         onCardLike={onCardLike}
+                        onCardDelete={onCardDelete}
                     />)}
             </section>
         </main>

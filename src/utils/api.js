@@ -33,7 +33,7 @@ class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: userData.name,
-                about: userData.job
+                about: userData.about
             })
         })
             .then(this._checkError);
@@ -45,7 +45,7 @@ class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: data.name,
-                link: data.url
+                link: data.link
             })
         })
             .then(this._checkError);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Header from "./Header";
 import Main from "./Main";
 import Footer from './Footer';
@@ -9,6 +9,12 @@ import PopupWithEditProfile from './PopupWithEditProfile';
 import PopupWithAddPlace from './PopupWithAddPlace';
 import api from '../utils/api';
 import CurrentUserContext from '../context/CurrentUserContext';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
+import { login, register, checkAuth } from './auth';
+import PopupRegister from './PopupRegister';
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
@@ -17,6 +23,11 @@ function App() {
     const [cards, setCards] = useState([]);
     const [selectedCard, setSelectedCard] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState({});
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [registerOk, setRegisterOk] = React.useState(false);
+    const [registerStatus, setRegisterStatus] = React.useState('');
+
+    const navigate = useNavigate();
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true);
@@ -34,12 +45,67 @@ function App() {
         setIsEditAvatarPopupOpen(false)
         setIsEditProfilePopupOpen(false)
         setIsAddPlacePopupOpen(false)
+        setRegisterOk(false)
         setSelectedCard(null)
     }
 
     function handleCardClick(card) {
         setSelectedCard(card)
     }
+
+    function clearToken() {
+        localStorage.removeItem('jwt');
+    }
+
+    const handleSingIn = useCallback(async (data) => {
+        try {
+            const {token}=await login(data);
+            localStorage.setItem('jwt', token);
+            setIsLoggedIn(true);
+            navigate('/');
+        } catch (err) {
+            setIsLoggedIn(false);
+            console.log(err.massage);
+        }
+        
+        // .then((data)=>{
+        //     localStorage.setItem('jwt', data.token);
+        //     setIsLoggedIn(true);
+        //     navigate('/');
+        // }).catch(()=>{
+        //     setIsLoggedIn(false);
+        // });
+    },[navigate]);
+
+    const handleSingUp = useCallback(async (data) => {
+        // const response = await register(data);
+        // setRegisterOk(true);
+        // if (response) {
+        //     setRegisterStatus('success');
+        // } else{
+        //     setRegisterStatus('error');
+        // }
+        try {
+            await register(data);
+            setRegisterOk(true);
+            setRegisterStatus('success');
+            navigate('/sing-in');
+        } catch (err) {
+            setRegisterOk(true);
+            setRegisterStatus('error');
+        };
+    }, [navigate]);
+
+    useEffect(() => {
+        const jwt = localStorage.getItem('jwt');
+        if(jwt) {
+            checkAuth(jwt).then((data)=>{
+                setCurrentUser((userData) => ({ ...userData, email: data.data.email }));
+                setIsLoggedIn(true);
+                navigate('/');
+            })
+        }
+    },[navigate])
 
     function handleCardLike(card) {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -99,17 +165,26 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
 
-                <Header />
+                <Header clearToken={clearToken}/>
 
-                <Main
-                    onEditAvatar={handleEditAvatarClick}
-                    onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
-                    onCardClick={handleCardClick}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDelete}
-                    cards={cards}
-                />
+                <Routes>
+                    <Route
+                        element={<ProtectedRoute isLoggedIn={isLoggedIn} />}
+                    >
+                        <Route path='/' element={
+                            <Main
+                                onEditAvatar={handleEditAvatarClick}
+                                onEditProfile={handleEditProfileClick}
+                                onAddPlace={handleAddPlaceClick}
+                                onCardClick={handleCardClick}
+                                onCardLike={handleCardLike}
+                                onCardDelete={handleCardDelete}
+                                cards={cards}
+                            />} />
+                    </Route>
+                    <Route path='/sing-in' element={<Login onSubmit={handleSingIn} />} />
+                    <Route path='/sing-up' element={<Register onSubmit={handleSingUp} />} />
+                </Routes>
 
                 <Footer />
 
@@ -140,6 +215,12 @@ function App() {
                     isOpen={isEditAvatarPopupOpen}
                     onClose={closeAllPopups}
                     onUpdateAvatar={handleUpdateAvatar}
+                />
+
+                <PopupRegister
+                    isOpen={registerOk}
+                    onClose={closeAllPopups}
+                    status={registerStatus}
                 />
 
             </div>

@@ -156,7 +156,7 @@ function App() {
             api.getUserInfo(),
             api.getCards()
         ]).then(([userData, cardData]) => {
-            setCurrentUser(userData);
+            setCurrentUser((data) => ({...data, userData: userData}));
             setCards(cardData);
         }).catch(err => console.log(`Ошибка.....: ${err}`));
     }, []);

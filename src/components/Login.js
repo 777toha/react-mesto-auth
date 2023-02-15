@@ -18,7 +18,7 @@ function Login(props) {
     return(
         <div className='auth'>
             <h1 className='auth__title'>Вход</h1>
-            <form className='auth__form' noValidate onSubmit={handleSubmit}>
+            <form className='auth__form' onSubmit={handleSubmit}>
                 <input className='auth__input' type='email' placeholder="Email"
                 value={email}
                 onChange={(e) => {setEmail(e.target.value)}}

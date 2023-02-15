@@ -3,7 +3,7 @@ function ImagePopup(props) {
         <section className={`popup popup_zoom-image ${props.card ? 'popup_opened' : ''}`}>
             <figure className="popup__figure popup__overlay">
                 <img
-                    src={props.card ? props.card.link : '#'}
+                    src={props.card ?.link}
                     className="popup__image"
                     alt={props.card ? props.card.name : ''} />
                 <figcaption className="popup__caption">

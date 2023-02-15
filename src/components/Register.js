@@ -19,7 +19,7 @@ function Register(props) {
     return(
         <div className='auth'>
             <h1 className='auth__title'>Регистрация</h1>
-            <form className='auth__form' noValidate onSubmit={handleSubmit}>
+            <form className='auth__form' onSubmit={handleSubmit}>
                 <input 
                 className='auth__input' 
                 type='email' 

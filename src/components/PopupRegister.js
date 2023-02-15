@@ -2,7 +2,7 @@ import Union_true from '../image/Union_true.png';
 import Union_false from '../image/Union_false.png';
 
 function PopupRegister(props) {
-    const {isOpen,onClose, status} = props;
+    const { isOpen, onClose, status } = props;
     return (
         <section className={`popup popup_register ${isOpen ? 'popup_opened' : ''}`}>
             <div className="popup__container popup__overlay">

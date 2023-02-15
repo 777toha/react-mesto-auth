@@ -13,7 +13,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import { login, register, checkAuth } from './auth';
+import { login, register, checkAuth } from '../utils/auth';
 import PopupRegister from './PopupRegister';
 import PopupBorger from './PopupBorger';
 
@@ -66,32 +66,19 @@ function App() {
 
     const handleSingIn = useCallback(async (data) => {
         try {
-            const {token}=await login(data);
+            const { token } = await login(data);
             localStorage.setItem('jwt', token);
             setIsLoggedIn(true);
             navigate('/');
         } catch (err) {
             setIsLoggedIn(false);
-            console.log(err.massage);
+            setRegisterOk(true);
+            setRegisterStatus('error');
+            console.log(`Ошибка.....: ${err}`)
         }
-        
-        // .then((data)=>{
-        //     localStorage.setItem('jwt', data.token);
-        //     setIsLoggedIn(true);
-        //     navigate('/');
-        // }).catch(()=>{
-        //     setIsLoggedIn(false);
-        // });
-    },[navigate]);
+    }, [navigate]);
 
     const handleSingUp = useCallback(async (data) => {
-        // const response = await register(data);
-        // setRegisterOk(true);
-        // if (response) {
-        //     setRegisterStatus('success');
-        // } else{
-        //     setRegisterStatus('error');
-        // }
         try {
             await register(data);
             setRegisterOk(true);
@@ -100,19 +87,20 @@ function App() {
         } catch (err) {
             setRegisterOk(true);
             setRegisterStatus('error');
+            console.log(`Ошибка.....: ${err}`)
         };
     }, [navigate]);
 
     useEffect(() => {
         const jwt = localStorage.getItem('jwt');
-        if(jwt) {
-            checkAuth(jwt).then((data)=>{
+        if (jwt) {
+            checkAuth(jwt).then((data) => {
                 setCurrentUser((userData) => ({ ...userData, email: data.data.email }));
                 setIsLoggedIn(true);
                 navigate('/');
-            })
+            }).catch(err => console.log(`Ошибка.....: ${err}`));
         }
-    },[navigate])
+    }, [navigate])
 
     function handleCardLike(card) {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -159,29 +147,31 @@ function App() {
     }
 
     useEffect(() => {
-        Promise.all([
-            api.getUserInfo(),
-            api.getCards()
-        ]).then(([userData, cardData]) => {
-            setCurrentUser((prevState) => ({ ...prevState, ...userData }));
-            setCards(cardData);
-        }).catch(err => console.log(`Ошибка.....: ${err}`));
-    }, []);
+        if (isLoggedIn) {
+            Promise.all([
+                api.getUserInfo(),
+                api.getCards()
+            ]).then(([userData, cardData]) => {
+                setCurrentUser((prevState) => ({ ...prevState, ...userData }));
+                setCards(cardData);
+            }).catch(err => console.log(`Ошибка.....: ${err}`));
+        }
+    }, [isLoggedIn]);
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
 
-                <PopupBorger 
-                isOpen={borgerPopup}
-                clearToken={clearToken} 
+                <PopupBorger
+                    isOpen={borgerPopup}
+                    clearToken={clearToken}
                 />
 
-                <Header 
-                clearToken={clearToken} 
-                onClick={handleEditBorgerPopup}
-                status={borgerPopup}
-                onClose={closeAllPopups}
+                <Header
+                    clearToken={clearToken}
+                    onClick={handleEditBorgerPopup}
+                    status={borgerPopup}
+                    onClose={closeAllPopups}
                 />
 
                 <Routes>

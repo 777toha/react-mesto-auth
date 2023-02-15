@@ -1,5 +1,11 @@
 const BASE_URL = 'https://auth.nomoreparties.co';
 
+function checkError(response) {
+    if (!response.ok) {
+        throw new Error(response)
+    }
+}
+
 export const login = async (data) => {
     const response = await fetch(`${BASE_URL}/signin`, {
         method: 'POST',
@@ -9,9 +15,7 @@ export const login = async (data) => {
         },
         body: JSON.stringify(data)
     });
-    if (!response.ok) {
-        throw new Error(response)
-    }
+    checkError(response);
     return response.json();
 };
 
@@ -24,9 +28,7 @@ export const register = async (data) => {
         },
         body: JSON.stringify(data)
     });
-    if (!response.ok) {
-        throw new Error(response)
-    }
+    checkError(response)
 }
 
 export const checkAuth = async (token) => {

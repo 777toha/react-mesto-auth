@@ -10,13 +10,12 @@ function Header(props) {
     const currentUser = React.useContext(CurrentUserContext);
 
     function handleMove() {
-        if(status === true){
+        if (status === true) {
             onClose()
         } else {
             onClick()
         }
     }
-        
 
     return (
         <header className="header">

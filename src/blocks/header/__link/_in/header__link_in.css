@@ -6,6 +6,9 @@
     color: #fff;
     margin-left: 24px;
 }
+.header__link_in:hover {
+    opacity: .6;
+}
 
 @media screen and (max-width: 650px) {
     .header__link_in {

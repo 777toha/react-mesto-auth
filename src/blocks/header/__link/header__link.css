@@ -7,6 +7,9 @@ color: #fff;
 margin-bottom: 41px;
 display: flex;
 }
+.header__link:hover {
+    opacity: .6;
+}
 
 @media screen and (max-width: 650px) {
     .header__link {

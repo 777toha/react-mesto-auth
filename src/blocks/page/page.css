@@ -1,6 +1,4 @@
 .page {
-    padding-top: 45px;
-    padding-bottom: 60px;
     background-color: #000;
     font-family: 'Inter', sans-serif;
     text-rendering: optimizeLegibility;
@@ -11,11 +9,4 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-}
-
-@media screen and (max-width: 650px) {
-    .page {
-        padding-top: 28px;
-        padding-bottom: 36px;
-    }
 }

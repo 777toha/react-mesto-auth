@@ -15,16 +15,18 @@ import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import { login, register, checkAuth } from './auth';
 import PopupRegister from './PopupRegister';
+import PopupBorger from './PopupBorger';
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [registerOk, setRegisterOk] = React.useState(false);
+    const [borgerPopup, setBorgerPopup] = React.useState(false);
     const [cards, setCards] = useState([]);
     const [selectedCard, setSelectedCard] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState({});
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-    const [registerOk, setRegisterOk] = React.useState(false);
     const [registerStatus, setRegisterStatus] = React.useState('');
 
     const navigate = useNavigate();
@@ -41,10 +43,15 @@ function App() {
         setIsAddPlacePopupOpen(true);
     }
 
+    function handleEditBorgerPopup() {
+        setBorgerPopup(true);
+    }
+
     function closeAllPopups() {
         setIsEditAvatarPopupOpen(false)
         setIsEditProfilePopupOpen(false)
         setIsAddPlacePopupOpen(false)
+        setBorgerPopup(false)
         setRegisterOk(false)
         setSelectedCard(null)
     }
@@ -156,7 +163,7 @@ function App() {
             api.getUserInfo(),
             api.getCards()
         ]).then(([userData, cardData]) => {
-            setCurrentUser((data) => ({...data, userData: userData}));
+            setCurrentUser((prevState) => ({ ...prevState, ...userData }));
             setCards(cardData);
         }).catch(err => console.log(`Ошибка.....: ${err}`));
     }, []);
@@ -165,7 +172,17 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
 
-                <Header clearToken={clearToken}/>
+                <PopupBorger 
+                isOpen={borgerPopup}
+                clearToken={clearToken} 
+                />
+
+                <Header 
+                clearToken={clearToken} 
+                onClick={handleEditBorgerPopup}
+                status={borgerPopup}
+                onClose={closeAllPopups}
+                />
 
                 <Routes>
                     <Route

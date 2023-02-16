@@ -8,13 +8,13 @@ function Card(props) {
     const isOwn = props.cards.owner._id === currentUser._id;
     const isLiked = props.cards.likes.some(i => i._id === currentUser._id);
 
-    const cardLikeButtonClassName = ( 
-        `element__like-button ${isLiked && 'element__like-button_active'}` 
-      );
+    const cardLikeButtonClassName = (
+        `element__like-button ${isLiked && 'element__like-button_active'}`
+    );
 
     function handleCardClick() {
         props.onCardClick(props.cards);
-      }  
+    }
 
     function handleLikeClick() {
         props.onCardLike(props.cards)
@@ -28,19 +28,19 @@ function Card(props) {
         <div id="element-template">
             <div className="element">
                 {isOwn && <button className="element__trash" type="button" onClick={handleCardDelete} />}
-                <img 
-                className="element__image" 
-                src={props.cards.link}
-                alt={props.cards.name}
-                onClick={handleCardClick}
+                <img
+                    className="element__image"
+                    src={props.cards.link}
+                    alt={props.cards.name}
+                    onClick={handleCardClick}
                 />
                 <div className="element__container">
                     <h2 className="element__title">{props.cards.name}</h2>
                     <div className="element__like">
-                        <button 
-                        className={cardLikeButtonClassName} 
-                        type="button"
-                        onClick={handleLikeClick}
+                        <button
+                            className={cardLikeButtonClassName}
+                            type="button"
+                            onClick={handleLikeClick}
                         ></button>
                         <p className="element__counter-like">{props.cards.likes.length}</p>
                     </div>

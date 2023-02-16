@@ -11,7 +11,7 @@ function PopupWithAddPlace(props) {
             name: namePlaceRef.current.value,
             link: linkPlaceRef.current.value
         })
-    }   
+    }
     return (
         <PopupWithForm
             name='popup_card-add'

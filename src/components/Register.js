@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 
 function Register(props) {
-    const {onSubmit} = props; 
+    const { onSubmit } = props;
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -14,26 +14,26 @@ function Register(props) {
         };
         onSubmit(formData)
 
-    },[email,password,onSubmit])
+    }, [email, password, onSubmit])
 
-    return(
+    return (
         <div className='auth'>
             <h1 className='auth__title'>Регистрация</h1>
             <form className='auth__form' onSubmit={handleSubmit}>
-                <input 
-                className='auth__input' 
-                type='email' 
-                placeholder="Email"
-                value={email}
-                onChange={(e) => {setEmail(e.target.value)}}
+                <input
+                    className='auth__input'
+                    type='email'
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value) }}
                 >
                 </input>
-                <input 
-                className='auth__input' 
-                type='password' 
-                placeholder="Пароль"
-                value={password}
-                onChange={(e) => {setPassword(e.target.value)}}
+                <input
+                    className='auth__input'
+                    type='password'
+                    placeholder="Пароль"
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value) }}
                 >
                 </input>
                 <button className='auth__button'>Зарегистрироваться</button>
